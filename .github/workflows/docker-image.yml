@@ -13,6 +13,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file SoftwareEngineering/Dockerfile
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Log into registry ${{ env.GHCR_REGISTRY }}
+        uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Log into registry ${{ env.DOCKERHUB_REGISTRY }}
+        uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+        with:
+          registry: docker.io
+          username: kiggi
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: |
+            kiggi/se-wise-image:latest
+            ghcr.io/kiggi/swe-wise-image:latest
