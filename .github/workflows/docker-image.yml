@@ -44,4 +44,4 @@ jobs:
           file: SoftwareEngineering/Dockerfile
           tags: |
             kiggi/se-wise-image:latest
-            ghcr.io/kiggi/swe-wise-image:latest
+            ghcr.io/kiggi/se-wise-image:latest
